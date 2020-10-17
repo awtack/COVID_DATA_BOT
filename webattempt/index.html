@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+body {font-family: "Avenir", sans-serif}
+.mySlides {display: none}
+</style>
+<body onload="brython()">
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-black w3-card">
+<!--     <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a> -->
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">HOME</a>
+    <a href="#about" class="w3-bar-item w3-button w3-padding-large">ABOUT</a>
+<!--     <div class="w3-dropdown-hover w3-hide-small">
+      <button class="w3-padding-large w3-button" title="More">MORE <i class="fa fa-caret-down"></i></button>     
+      <div class="w3-dropdown-content w3-bar-block w3-card-4">
+        <a href="#" class="w3-bar-item w3-button">Merchandise</a>
+        <a href="#" class="w3-bar-item w3-button">Extras</a>
+        <a href="#" class="w3-bar-item w3-button">Media</a>
+      </div>
+    </div> -->
+    <!-- <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a> -->
+  </div>
+</div>
+
+<!-- Navbar on small screens (remove the onclick attribute if you want the navbar to always show on top of the content when clicking on the links) -->
+<!-- <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+  <a href="#band" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">ABOUT</a>
+</div> -->
+
+<!-- Page content -->
+<div class="w3-content" style="max-width:2000px;margin-top:46px">
+
+  <!-- The Band Section -->
+  <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
+    <h2 class="w3-wide">COVID DATA BOT</h2>
+    <p class="w3-opacity"><i>Dynamic trends</i></p>
+    <p class="w3-justify">We have created a COVID tracking program with open source data. Feel free to click around
+    and identify the trends for different countries over different time ranges! </p>
+  </div>
+
+<script type="text/javascript">
+function Rectangle(x0, y0, x1, y1){
+    this.x0 = x0
+    this.y0 = y0
+    this.x1 = x1
+    this.y1 = y1
+    this.surface = function(){return (x1 - x0) * (y1 - y0)}
+}
+function Trrd(){
+	return [1, 2, 3, 4]
+}
+function Bad(){
+	return [5, 10, 2, 8]
+}
+// circle = {surface: function(r){return 3.14 * r * r}}
+circle = {surface: function(r){return [1, 2, 3, 4]}}
+square = {surface: function(r){return [5, 10, 2, 8]}}
+</script>
+
+
+
+
+<script type="text/python">
+from browser import document, html, window
+
+element = document["about"]
+nb = 0
+
+def change(event):
+    global nb
+    element <= html.B(f" {nb}")
+    nb = window.circle.surface(10)
+	# document["about"].textContent = window.square.surface(1)
+    document["about"].value = window.square.surface(1)
+
+document["about"].bind("click", change)
+
+# basically what everything above is trying to do is pass a python value to an array... but that doesn't work
+
+</script>
+
+    <!-- The Band Section -->
+  <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="about">
+    <h2 class="w3-wide">About us</h2>
+    <p class="w3-opacity"><i>HackNC October 2020</i></p>
+    <p class="w3-justify">We are programmers at the University of North Carolina at Chapel Hill, and we decided
+    to use our programming skills to generate a dynamic COVID tracker by country based on the user input.</p>
+  </div>
+
+
+  
+<!-- End Page Content -->
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
+  <i class="fa fa-facebook-official w3-hover-opacity"></i>
+  <i class="fa fa-instagram w3-hover-opacity"></i>
+  <i class="fa fa-snapchat w3-hover-opacity"></i>
+  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+  <i class="fa fa-twitter w3-hover-opacity"></i>
+  <i class="fa fa-linkedin w3-hover-opacity"></i>
+</footer>
+
+<script>
+// Automatic Slideshow - change image every 4 seconds
+var myIndex = 0;
+carousel();
+
+function carousel() {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";  
+  }
+  myIndex++;
+  if (myIndex > x.length) {myIndex = 1}    
+  x[myIndex-1].style.display = "block";  
+  setTimeout(carousel, 4000);    
+}
+
+// Used to toggle the menu on small screens when clicking on the menu button
+function myFunction() {
+  var x = document.getElementById("navDemo");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else { 
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+var modal = document.getElementById('ticketModal');
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+<script src="brython.js"></script>
+<script src="brython_stdlib.js"></script>
+
+</body>
+</html>
