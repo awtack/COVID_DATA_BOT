@@ -322,7 +322,29 @@ def top_ten(data: List[float]) -> List[float]:
         i += 1
 
 
-def top_ten_dict(data: Dict[str, float]) -> Dict[str, float]:
+def top_15_dict(data: Dict[str, float]) -> Dict[str, float]:
+    """Takes in a list of floats and gives the top 15"""
+    new_data: Dict(str, float) = {}
+    data_copy: Dict(str, float) = {}
+    for key in data:
+        data_copy[key] = data[key]
+        
+    i = 0
+    if len(data_copy) < 15:
+        return data_copy
+
+    while i < 15:
+        for location in data_copy:
+            if location == max(data_copy, key=lambda key: data_copy[key]):
+                new_data[location] = data_copy[location]
+                data_copy.pop(location)
+                break
+        i += 1
+
+    return new_data
+
+
+def top_seven_dict(data: Dict[str, float]) -> Dict[str, float]:
     """Takes in a list of floats and gives the top ten"""
     new_data: Dict(str, float) = {}
     data_copy: Dict(str, float) = {}
@@ -330,10 +352,10 @@ def top_ten_dict(data: Dict[str, float]) -> Dict[str, float]:
         data_copy[key] = data[key]
         
     i = 0
-    if len(data_copy) < 10:
+    if len(data_copy) < 7:
         return data_copy
 
-    while i < 10:
+    while i < 7:
         for location in data_copy:
             if location == max(data_copy, key=lambda key: data_copy[key]):
                 new_data[location] = data_copy[location]
@@ -346,7 +368,7 @@ def top_ten_dict(data: Dict[str, float]) -> Dict[str, float]:
 
 def make_bar_chart_compare(operation: str, location_or_continent: str, date: str) -> None:
     """Bar charts the data of top 10 countries of continents at a date."""
-    pyplot.title(operation + "at" + date)
+    pyplot.title(operation + " at " + date)
     pyplot.xlabel(operation)
     pyplot.ylabel("Top locations")
 
@@ -365,7 +387,7 @@ def make_bar_chart_compare(operation: str, location_or_continent: str, date: str
         dict_index[index[x][0]] = values[x]
 
 
-    condensed_values: Dict[str, float] = top_ten_dict(dict_index)
+    condensed_values: Dict[str, float] = top_15_dict(dict_index)
 
     y_values: List[float] = []
     for key in condensed_values:
@@ -381,11 +403,45 @@ def make_bar_chart_compare(operation: str, location_or_continent: str, date: str
 
 def make_pie_chart_compare(operation: str, location_or_continent: str, date: str) -> None:
     """Pie charts the data of top 10 countries of continents at a date."""
-    plt.title(f"{operation} at {date}")
-    labels = location_or_continent
-    sizes = 0
+
+    values: List[float] = []
+    
+    index: List[List[str]] = list_of_values_at_date_at_operation(date, operation, location_or_continent)
+
+    dict_index: Dict[str, float] = {}
+    for x in index:
+        if x[1] == '':
+            values.append(0)
+        else:
+            values.append(float(x[1]))
+
+    for x in range(0, len(values)): 
+        dict_index[index[x][0]] = values[x]
+
+
+    condensed_values: Dict[str, float] = top_seven_dict(dict_index)
+
+    y_values: List[float] = []
+    for key in condensed_values:
+        y_values.append(condensed_values[key])   
+    
+    x_locations: List[str] = []
+    for key in condensed_values:
+        x_locations.append(key)
+
+
+
+    
+    labels = x_locations
+    sizes = y_values
     colors = ["red", "blue", "green", "yellow", "purple", "brown", "teal", "pink", "lightcoral", "lightskyblue"]
-    plt.pie()
+    explode = (0.1, 0, 0, 0, 0, 0, 0)
+
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.0f%%',
+        shadow= False, startangle=90)
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    plt.title(f"{operation} at {date}")
     plt.show()
     return None
         
