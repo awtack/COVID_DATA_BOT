@@ -284,14 +284,14 @@ def top_ten_dict(data: Dict[str, float]) -> Dict[str, float]:
         return data_copy
 
     while i < 10:
-        for key in data_copy:
-            if data_copy[key] == max(data_copy):
-                new_data[key] = data_copy[key]
-                data_copy.pop(key)
+        for location in data_copy:
+            if location == max(data_copy, key=lambda key: data_copy[key]):
+                new_data[location] = data_copy[location]
+                data_copy.pop(location)
                 break
         i += 1
 
-    return max(data_copy)
+    return new_data
 
 if __name__ == "__main__":
     main()

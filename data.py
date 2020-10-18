@@ -334,12 +334,14 @@ def top_ten_dict(data: Dict[str, float]) -> Dict[str, float]:
         return data_copy
 
     while i < 10:
-        for key in data_copy:
-            if data_copy[key] == max(data_copy):
-                new_data.append(data_copy[key])
-                data_copy.pop(key)
+        for location in data_copy:
+            if location == max(data_copy, key=lambda key: data_copy[key]):
+                new_data[location] = data_copy[location]
+                data_copy.pop(location)
                 break
         i += 1
+
+    return new_data
 
 
 def make_bar_chart_compare(operation: str, location_or_continent: str, date: str) -> None:
@@ -362,12 +364,18 @@ def make_bar_chart_compare(operation: str, location_or_continent: str, date: str
     for x in range(0, len(values)): 
         dict_index[index[x][0]] = values[x]
 
-    for x in dict_index:
 
+    condensed_values: Dict[str, float] = top_ten_dict(dict_index)
 
-    condensed_values: List[float] = top_ten(values)      
+    y_values: List[float] = []
+    for key in condensed_values:
+        y_values.append(condensed_values[key])   
     
-    pyplot.bar(, counts)
+    x_locations: List[str] = []
+    for key in condensed_values:
+        x_locations.append(key)
+
+    pyplot.bar(x_locations, y_values)
     pyplot.show()
 
 
@@ -375,7 +383,7 @@ def make_pie_chart_compare(operation: str, location_or_continent: str, date: str
     """Pie charts the data of top 10 countries of continents at a date."""
     plt.title(f"{operation} at {date}")
     labels = location_or_continent
-    sizes = 
+    sizes = 0
     colors = ["red", "blue", "green", "yellow", "purple", "brown", "teal", "pink", "lightcoral", "lightskyblue"]
     plt.pie()
     plt.show()
