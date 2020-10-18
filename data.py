@@ -81,12 +81,15 @@ def main() -> None:
             sys.exit("The given statistic was either not supplied in the\n" +
                      "correct format or was not in the list. Run the program" +
                      "again.")
-        print("For what date do you want the comparison: MM/DD/YYYY.")
+        print("For what date do you want the comparison: M/D/YYYY.")
 
         date: str = input("Date: ")        
         if not date_checker(date):
             sys.exit("The given date is either pre-2020, post-2020," +
                      "or has not happened yet! Run the program again.")
+
+        # print("Would you like a bar or pie chart?")
+        # chart_type: str = input("Chart type: ")
 
         make_bar_chart_compare(statistic, chosen_continent, date)
 
@@ -128,7 +131,7 @@ def main() -> None:
                      "again.")
         print("Do you want a statistic list for all of COVID or the value at\n",
               "a certain date? Type 'all' for the whole list, or a date for\n",
-              "the data at the date in the format: MM/DD/YYYY.")
+              "the data at the date in the format: M/D/YYYY.")
 
         date: str = input("date: ")        
         if not date_checker(date):
