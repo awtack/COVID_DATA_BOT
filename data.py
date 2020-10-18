@@ -38,11 +38,11 @@ def main() -> None:
     "Statistics on any country or continent in the world (including\n",
     "the world statistics)!\n"
     )
-    print("Do you want a comparison of data between countries, continents,\n",
+    print("Do you want a comparison of data between countries on continents,\n",
           "or the world, or do you want a singular value for any of these?\n",
           "Type 'Comparison' or 'Single Value')")
     comparison_Response: str = input("Type: ")
-    # Run a checker to see if the response to comparision is valid
+    # Run a checker to see if the response to comparison is valid
     valid_countries: List[str] = \
         duplicate_hunter(find_total_countries_continents("location"))
     valid_continents: List[str] = \
@@ -52,6 +52,8 @@ def main() -> None:
         # Run whole different process for a comparison
         # which country would you like to compare?
         # make pie chart or multiple line chart
+
+
         print("Which continent would you like to compare?")
         chosen_continent: str = input("Continent: ")
 
@@ -162,7 +164,7 @@ def main() -> None:
                 else:
                     sys.exit("You did not give a yes or a no. Run the program again.")
             if is_continent is True:
-                print("Continents are currently not supported.")
+                print("Continents are currently not supported for the 'all' date option.")
                 
                 # response_to_graph: str = input("Graph? ")
                 # if response_to_graph.lower() == "yes":
@@ -307,7 +309,10 @@ def list_of_values_at_date_at_operation(date: str, operation: str, continent: st
     for row in covid_csv:
         for country in countries:
             if row["date"] == date and row["location"] == country:
-                results[country] = int(row[operation])
+                try:
+                    results[country] = int(row[operation])
+                except ValueError:
+                    ...
 
     return results
 
