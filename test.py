@@ -8,6 +8,8 @@ file_path = "Covid_Data.csv"
 
 
 
+
+
 def loop_and_create(file_path: str) -> List[Dict[str, str]]:
 
     """Opens a csv file and simplifies the data."""
@@ -56,7 +58,7 @@ def main() -> None:
         "J": 15,
         "K": 22    }
 
-    print(top_ten_dict(dict))
+    print(continent_country_compare)
 
     return None
 
@@ -274,8 +276,8 @@ def list_of_values_at_date_at_operation(date: str, operation: str, continent_or_
 
 def top_ten_dict(data: Dict[str, float]) -> Dict[str, float]:
     """Takes in a list of floats and gives the top ten"""
-    new_data: Dict(str, float) = {}
-    data_copy: Dict(str, float) = {}
+    new_data: Dict(str, float) = Dict()
+    data_copy: Dict(str, float) = Dict()
     for key in data:
         data_copy[key] = data[key]
         

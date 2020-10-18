@@ -11,6 +11,8 @@ READ_MODE = "r"
 file_path = "Covid_Data.csv"
 
 
+
+
 def loop_and_create(file_path: str) -> List[Dict[str, str]]:
 
     """Opens a csv file and simplifies the data."""
