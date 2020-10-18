@@ -35,7 +35,7 @@ def main() -> None:
     print(
     "Welcome to the COVID Data Bot!!! This program uses a publicly\n",
     "available data set, published daily, to find requested COVID\n", 
-    "Statistics on any country or continent in the world (including",
+    "Statistics on any country or continent in the world (including\n",
     "the world statistics)!\n"
     )
     print("Do you want a comparison of data between countries, continents,\n",
@@ -52,7 +52,44 @@ def main() -> None:
         # Run whole different process for a comparison
         # which country would you like to compare?
         # make pie chart or multiple line chart
-        ...
+        print("Which continent would you like to compare?")
+        chosen_continent: str = input("Continent: ")
+
+        if chosen_continent not in valid_continents:
+            sys.exit("You gave an invalid continent. Run the " +
+                     "program again.")
+        
+        print("Please put in the statistic you want to know! We support",
+              "the following statistics in the same format:",
+              "\ntotal_cases"
+              "\nnew_cases",
+              "\ntotal_deaths",
+              "\nnew_deaths",
+              "\ntotal_cases_per_million",
+              "\nnew_cases_per_million",
+              "\ntotal_deaths_per_million",
+              "\nnew_deaths_per_million",
+              "\nnew_tests, total_tests",
+              "\ntotal_tests_per_thousand",
+              "\nnew_tests_per_thousand",
+              "\ntests_per_case",
+              "\npositive_rate",
+              "\ntests_units")
+        
+        statistic: str = input("Statistic: ")
+        if not valid_operation_checker(statistic):
+            sys.exit("The given statistic was either not supplied in the\n" +
+                     "correct format or was not in the list. Run the program" +
+                     "again.")
+        print("For what date do you want the comparison: MM/DD/YYYY.")
+
+        date: str = input("Date: ")        
+        if not date_checker(date):
+            sys.exit("The given date is either pre-2020, post-2020," +
+                     "or has not happened yet! Run the program again.")
+
+        make_bar_chart_compare(statistic, chosen_continent, date)
+
     if comparison_Response.lower() == "single value":
         print("Please put in the country or continent of interest (capitalized)! Or type World!")
 
@@ -122,14 +159,14 @@ def main() -> None:
                 else:
                     sys.exit("You did not give a yes or a no. Run the program again.")
             if is_continent is True:
-                print("Would you like a graph for? 'Yes' or 'No'")
+                print("Continents are currently not supported.")
                 
-                response_to_graph: str = input("Graph? ")
-                if response_to_graph.lower() == "yes":
-                    # We will then make a chart of the data
-                    ...
-                if response_to_graph.lower() == "no":
-                    print("Okay, no charting of the data!")
+                # response_to_graph: str = input("Graph? ")
+                # if response_to_graph.lower() == "yes":
+                #     # We will then make a chart of the data
+                #     ...
+                # if response_to_graph.lower() == "no":
+                #     print("Okay, no charting of the data!")
         print("Data requested was supplied!")            
 
     
@@ -260,15 +297,15 @@ def desired_value_by_continent_at_date_total(date: str, continent: str, chosen_c
     return return_int
 
 
-def list_of_values_at_date_at_operation(date: str, operation: str, continent_or_location: str) -> List[List[str]]:
-    results: List[List[str]] = []
+def list_of_values_at_date_at_operation(date: str, operation: str, continent: str) -> Dict[str, int]:
+    results: Dict[str, int] = {}
+    countries: List[str] = countries_in_continents(continent)
+    
     for row in covid_csv:
-        if row["date"] == date and row["location"] != "World" and row["location"] != "International":
-            location_to_value: List[str] = []
-            location_to_value.append(row[continent_or_location])
-            location_to_value.append(row[operation])
-            results.append(location_to_value)
-            
+        for country in countries:
+            if row["date"] == date and row["location"] == country:
+                results[country] = int(row[operation])
+
     return results
 
 
@@ -341,34 +378,29 @@ def make_bar_chart_compare(operation: str, location_or_continent: str, date: str
     """Bar charts the data of top 10 countries of continents at a date."""
     pyplot.title(operation + " at " + date)
     pyplot.xlabel(operation)
-    pyplot.ylabel("Top locations")
-
-    values: List[float] = []
+    pyplot.ylabel("Countries")
     
-    index: List[List[str]] = list_of_values_at_date_at_operation(date, operation, location_or_continent)
+    index: Dict[str, int] = list_of_values_at_date_at_operation(date, operation, location_or_continent)
 
-    dict_index: Dict[str, float] = {}
-    for x in index:
-        if x[1] == '':
-            values.append(0)
-        else:
-            values.append(float(x[1]))
-
-    for x in range(0, len(values)): 
-        dict_index[index[x][0]] = values[x]
-
-    condensed_values: Dict[str, float] = top_15_dict(dict_index)
-
-    y_values: List[float] = []
-    for key in condensed_values:
-        y_values.append(condensed_values[key])   
-    
     x_locations: List[str] = []
-    for key in condensed_values:
+    y_values: List[int] = []
+    for key in index:
         x_locations.append(key)
+        y_values.append(index[key])
+    
+    labels = x_locations
+    sizes = y_values
+    # explode = [1] * len(x_locations)
 
-    pyplot.bar(x_locations, y_values)
-    pyplot.show()
+    # fig1, ax1 = plt.subplots()
+    # ax1.legend(labels)
+    # ax1.pie(sizes, autopct='%1.0f%%',
+    #     shadow= False, startangle=90)
+    # ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    plt.bar(labels, sizes)
+    plt.xticks(rotation=70, fontsize=8)
+    plt.title(f"{operation} at {date}")
+    plt.show()
 
 
 def make_pie_chart_compare(operation: str, location_or_continent: str, date: str) -> None:
@@ -376,31 +408,13 @@ def make_pie_chart_compare(operation: str, location_or_continent: str, date: str
 
     values: List[float] = []
     
-    index: List[List[str]] = list_of_values_at_date_at_operation(date, operation, location_or_continent)
+    index: Dict[str, int] = list_of_values_at_date_at_operation(date, operation, location_or_continent)
 
-    dict_index: Dict[str, float] = {}
-    for x in index:
-        if x[1] == '':
-            values.append(0)
-        else:
-            values.append(float(x[1]))
-
-    for x in range(0, len(values)): 
-        dict_index[index[x][0]] = values[x]
-
-
-    condensed_values: Dict[str, float] = top_seven_dict(dict_index)
-
-    y_values: List[float] = []
-    for key in condensed_values:
-        y_values.append(condensed_values[key])   
-    
     x_locations: List[str] = []
-    for key in condensed_values:
+    y_values: List[int] = []
+    for key, value in index:
         x_locations.append(key)
-
-
-
+        y_values.append(int(value))
     
     labels = x_locations
     sizes = y_values
